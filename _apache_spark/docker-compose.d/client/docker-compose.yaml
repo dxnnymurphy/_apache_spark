@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  #######################################################################
+  ### services :: _ops_data_spark_jupyter
+  #######################################################################
+  _ops_data_spark_jupyter:
+    image: localhost/kc-dataengineering-data-spark/spark:3.3.1
+    privileged: true
+    restart: always
+    env_file:
+    - $PWD/.secret/__envrc.d/.default/credential._ops_data_spark_jupyter.envrc
+    - $PWD/config/__envrc.d/prod-A-apptest-$HOSTIP_PRIVATE/_ops_data_spark_jupyter.envrc
+    hostname: spark-driver-$HOSTNAME_PRIVATE
+    networks:
+    - _network-bridge-local
+    ports:
+    # CLI + Jupyter
+    - $HOSTIP_PRIVATE:44077:7681
+    - $HOSTIP_PRIVATE:44477:8888
+    # App-A1
+    - $HOSTIP_PRIVATE:14077:14077
+    - $HOSTIP_PRIVATE:24077:24077
+    - $HOSTIP_PRIVATE:54077:54077
+    # App-A2
+    - $HOSTIP_PRIVATE:15077:15077
+    - $HOSTIP_PRIVATE:25077:25077
+    - $HOSTIP_PRIVATE:55077:55077
+    # App-A2
+    - $HOSTIP_PRIVATE:16077:16077
+    - $HOSTIP_PRIVATE:26077:26077
+    - $HOSTIP_PRIVATE:56077:56077
+    volumes:
+    - _volume__ops_data_spark_jupyter:/home/keplercheuvreux/.keplercheuvreux/var/workspace/jupyter
+    - /export/cheuvreux/v1/.workspace/mnt/shared/kcde-uat/:/mnt/shared/kcde-uat/
+    - $PWD/config/_ops_data_spark_jupyter/.default/conf/metrics.properties:/home/keplercheuvreux/.keplercheuvreux/opt/spark/spark/current/conf/metrics.properties
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '1m'
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+
+networks:
+  _network-bridge-local:
+    driver: bridge
+
+volumes:
+  _volume__ops_data_spark_jupyter: {}

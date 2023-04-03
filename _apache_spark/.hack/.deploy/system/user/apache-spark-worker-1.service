@@ -1,0 +1,17 @@
+[Unit]
+Description=apache-spark-worker-1
+Wants=network-online.target
+After=network-online.target docker.service openvpn-client@client-node-188.service
+
+[Install]
+WantedBy=default.target
+
+[Service]
+Type=simple
+Environment=HOSTNAME=%H
+Environment=HOSTIP_PRIVATE=172.21.1.188
+Environment=HOSTNAME_PRIVATE=host-172-21-1-188
+WorkingDirectory=/.workspace/opt/bitbucket.org/kcde/_apache_spark/current/_apache_spark
+ExecStart=/bin/bash -c 'docker compose -f docker-compose.d/worker/docker-compose.yaml up'
+ExecStop=/bin/bash -c 'docker compose -f docker-compose.d/worker/docker-compose.yaml down'
+Restart=always

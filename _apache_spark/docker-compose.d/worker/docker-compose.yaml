@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  #######################################################################
+  ### services :: _ops_data_spark_worker
+  #######################################################################
+  _ops_data_spark_worker:
+    image: localhost/kc-dataengineering-data-spark/spark:3.3.1
+    privileged: true
+    restart: always
+    env_file:
+    - $PWD/config/__envrc.d/prod-A-worker-$HOSTIP_PRIVATE/_ops_data_spark_worker.envrc
+    network_mode: "host"
+    volumes:
+    - _volume__ops_data_spark_worker:/home/keplercheuvreux/.keplercheuvreux/var/data/spark/worker
+    - /export/cheuvreux/v1/.workspace/mnt/shared/kcde-uat/:/mnt/shared/kcde-uat/
+    - $PWD/config/_ops_data_spark_worker/.default/conf/metrics.properties:/home/keplercheuvreux/.keplercheuvreux/opt/spark/spark/current/conf/metrics.properties
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '1m'
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '3.0'
+          memory: 6G
+
+volumes:
+  _volume__ops_data_spark_worker: {}
