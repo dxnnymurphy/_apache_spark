@@ -1,6 +1,6 @@
 all: build
 
-_DOCKER_IMAGE_NAMESPACE ?= localhost/kc-dataengineering-data-spark
+_DOCKER_IMAGE_NAMESPACE ?= localhost/data-apache-spark
 _DOCKER_IMAGE_NAME      ?= spark
 _DOCKER_IMAGE_TAG       ?= 3.3.1
 

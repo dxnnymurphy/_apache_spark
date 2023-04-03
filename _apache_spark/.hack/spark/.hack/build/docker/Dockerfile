@@ -24,6 +24,7 @@ WORKDIR /home/danny
 
 COPY --chown=danny:danny homefs /home/danny
 
+
 #######################################################################
 ### Java
 #######################################################################
@@ -36,9 +37,9 @@ RUN mkdir -p /home/danny/.danny/opt/java/java; \
 
 RUN mkdir -p /home/danny/.danny/opt/java/maven; \
     cd /home/danny/.danny/opt/java/maven; \
-    curl -kL https://dlcdn.apache.org/maven/maven-3/3.9.0/binaries/apache-maven-3.9.0-bin.tar.gz -O; \
-    tar -zxvf apache-maven-3.9.0-bin.tar.gz; \
-    ln -sf apache-maven-3.9.0 current;
+    curl -kL https://dlcdn.apache.org/maven/maven-3/3.9.1/binaries/apache-maven-3.9.1-bin.tar.gz -O; \
+    tar -zxvf apache-maven-3.9.1-bin.tar.gz; \
+    ln -sf apache-maven-3.9.1 current;
 
 RUN mkdir -p /home/danny/.danny/opt/spark/spark; \
     cd /home/danny/.danny/opt/spark/spark; \
@@ -115,12 +116,6 @@ RUN mkdir -p /home/danny/.danny/var/workspace/jupyter/doc;
 RUN echo "conda activate danny" >> /home/danny/.bashrc.d/conda.sh
 
 COPY --chown=danny:danny appfs /home/danny/.danny
-
-RUN . /home/danny/.bashrc; \
-    conda activate danny; \
-    http_proxy="" https_proxy=""; \
-    pip install kc-dataengineering-api-python-libannotation==0.1.13; \
-    conda deactivate;
 
 RUN chmod +x /home/danny/.danny/bin/*
 CMD [ ".danny/bin/app.sh", "--start" ]
